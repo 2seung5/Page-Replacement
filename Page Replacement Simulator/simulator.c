@@ -1,25 +1,31 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <time.h>
 
-int fn;              //ÆäÀÌÁö ÇÁ·¹ÀÓ °³¼ö
-int stream[10];     //ÂüÁ¶ ÆäÀÌÁö ½ºÆ®¸µ
-int hit;             //hit º¯¼ö 0 or 1
-int pagefaultcnt;    //ÆäÀÌÁö ÆúÆ® Ä«¿îÅÍ
+int fn;              //í˜ì´ì§€ í”„ë ˆì„ ê°œìˆ˜
+int stream[10];     //ì°¸ì¡° í˜ì´ì§€ ìŠ¤íŠ¸ë§
+int hit;             //hit ë³€ìˆ˜ 0 or 1
+int pagefaultcnt;    //í˜ì´ì§€ í´íŠ¸ ì¹´ìš´í„°
 int p[100];
+int i,j,k;
 
-void getData1()  // ÇÁ·Î±×·¥ ³»ºÎ¿¡¼­ ÀÔ·Â ¹Ş´Â ¹æ½Ä
+
+void getData1()  // í”„ë¡œê·¸ë¨ ë‚´ë¶€ì—ì„œ ì…ë ¥ ë°›ëŠ” ë°©ì‹
 {
     int in[10];
+    srand((unsigned)time(NULL));
 
     for (int i = 0; i < 10; i++)
     {
-        in[i]=rand()%30;
+        
+        in[i]=1+rand()%30;
         stream[i] = in[i];
     }
     
 }
 
-void getData2() //ÆÄÀÏ·Î ÀúÀåÇÏ¿© ÀÌ¸¦ ¿ÀÇÂÇÏ¿© ÀÔ·Â¹Ş´Â ¹æ½Ä??????????????
+void getData2() //íŒŒì¼ë¡œ ì €ì¥í•˜ì—¬ ì´ë¥¼ ì˜¤í”ˆí•˜ì—¬ ì…ë ¥ë°›ëŠ” ë°©ì‹??????????????
 {   
     int in[10];
     FILE *fp =fopen("string.txt","w");
@@ -28,20 +34,20 @@ void getData2() //ÆÄÀÏ·Î ÀúÀåÇÏ¿© ÀÌ¸¦ ¿ÀÇÂÇÏ¿© ÀÔ·Â¹Ş´Â ¹æ½Ä??????????????
         in[i]=rand()%30;
         fprintf(fp,"%d\n",in[i]);
     }
-    fgets(stream,sizeof(stream), fp);  //ÀÌ°Ô ¸Â³ª?
+    // fgets(stream,sizeof(stream), fp);  //ì´ê²Œ ë§ë‚˜?
     
     fclose(fp);
    
 }
 
-void initialize()          // ÃÊ±âÈ­ ÇØÁÖ´Â ÇÔ¼ö?
+void initialize()          // ì´ˆê¸°í™” í•´ì£¼ëŠ” í•¨ìˆ˜
 {
     pagefaultcnt=0;
     for(int i=0; i<fn; i++)
         p[i]=9999;
 }
 
-int isHit(int data)          //hit È®ÀÎÇÏ´Â ÇÔ¼ö
+int isHit(int data)          //hit í™•ì¸í•˜ëŠ” í•¨ìˆ˜
 {
     hit=0;
     for(int j=0; j<fn; j++)
@@ -56,21 +62,21 @@ int isHit(int data)          //hit È®ÀÎÇÏ´Â ÇÔ¼ö
     return hit;
 }
 
-void pageFaultCnt()          //ÆäÀÌÁö ÆúÆ® °³¼ö ³ªÅ¸³»ÁÖ´Â ÇÔ¼ö
+void pageFaultCnt()          //í˜ì´ì§€ í´íŠ¸ ê°œìˆ˜ ë‚˜íƒ€ë‚´ì£¼ëŠ” í•¨ìˆ˜
 {
-    printf("\nnumber of page faults: %d",pagefaultcnt);
+    printf("number of page faults: %d\n",pagefaultcnt);
 }
 
 void interface()
 {
-    printf("ÆäÀÌÁö ÇÁ·¹ÀÓÀÇ °³¼ö¸¦ ÀÔ·ÂÇÏ½Ã¿À.(3~10)\n");
+    printf("í˜ì´ì§€ í”„ë ˆì„ì˜ ê°œìˆ˜ë¥¼ ì…ë ¥í•˜ì‹œì˜¤.(3~10)\n");
     // int fn;
     
     scanf("%d",&fn);
     if ( fn<3 || fn>10)
-        printf("´Ù½Ã ÀÔ·ÂÇÏ¼¼¿ä (3~10)\n");
+        printf("ë‹¤ì‹œ ì…ë ¥í•˜ì„¸ìš” (3~10)\n");
     else{
-        printf("µ¥ÀÌÅÍ ÀÔ·Â ¹æ½ÄÀ» ¼±ÅÃÇÏ½Ã¿À(1,2)\n");
+        printf("ë°ì´í„° ì…ë ¥ ë°©ì‹ì„ ì„ íƒí•˜ì‹œì˜¤(1,2)\n");
         int ch;
         scanf("%d",&ch);
         if (ch==1)
@@ -82,7 +88,7 @@ void interface()
             getData2();
         }
         else
-            printf("´Ù½Ã ÀÔ·ÂÇÏ¼¼¿ä 1,2\n");
+            printf("ë‹¤ì‹œ ì…ë ¥í•˜ì„¸ìš” 1,2\n");
     }
 }
 
@@ -90,11 +96,79 @@ void interface()
 void optimal()
 {
     interface();
+    initialize();
+    int near[50];
+    for(i=0; i<10; i++)
+    {
+ 
+        //printf("\nFor %d :",stream[i]);
+ 
+        if(isHit(stream[i])==0)
+        {
+ 
+            for(j=0; j<fn; j++)
+            {
+                int pg=p[j];
+                int found=0;
+                for(k=i; k<10; k++)
+                {
+                    if(pg==stream[k])
+                    {
+                        near[j]=k;
+                        found=1;
+                        break;
+                    }
+                    else
+                        found=0;
+                }
+                if(!found)
+                    near[j]=9999;
+            }
+            int max=-9999;
+            int repindex;
+            for(j=0; j<fn; j++)
+            {
+                if(near[j]>max)
+                {
+                    max=near[j];
+                    repindex=j;
+                }
+            }
+            p[repindex]=stream[i];
+            pagefaultcnt++;
+ 
+           
+        }
+        //else
+         //   printf("No page fault");
+    }
+    printf("optimal ");
+    pageFaultCnt();
 }
 
 void fifo()
 {
      interface();
+     initialize();
+     for(i=0; i<10; i++)
+     {
+        //printf("\nFor %d :",stream[i]);
+ 
+        if(isHit(stream[i])==0)
+        {
+ 
+            for(k=0; k<fn-1; k++)
+                p[k]=p[k+1];
+ 
+            p[k]=stream[i];
+            pagefaultcnt++;
+            
+        }
+        //else
+            // printf("No page fault");
+     }
+     printf("fifo ");
+     pageFaultCnt();
      
      
 }
@@ -102,74 +176,164 @@ void fifo()
 void lifo()
 {
      interface();
+     initialize();
+     for(i=0; i<10; i++)
+     {
+        printf("\nFor %d :",stream[i]);
+ 
+        if(isHit(stream[i])==0)
+        {   
+            for(k=0 ; k < fn-1; k++)
+                p[k+1]=p[k];
+            p[0]=stream[i];
+            pagefaultcnt++;   
+        }
+        
+     }
+     printf("lifo ");
+     pageFaultCnt();
 }
 
 void lru()
 {
      interface();
+     initialize();
+     int least[50];
+     for(i=0; i<10; i++)
+     {
+ 
+        //printf("\nFor %d :",stream[i]);
+ 
+        if(isHit(stream[i])==0)
+        {
+ 
+            for(j=0; j<fn; j++)
+            {
+                int pg=p[j];
+                int found=0;
+                for(k=i-1; k>=0; k--)
+                {
+                    if(pg==stream[k])
+                    {
+                        least[j]=k;
+                        found=1;
+                        break;
+                    }
+                    else
+                        found=0;
+                }
+                if(!found)
+                    least[j]=-9999;
+            }
+            int min=9999;
+            int repindex;
+            for(j=0; j<fn; j++)
+            {
+                if(least[j]<min)
+                {
+                    min=least[j];
+                    repindex=j;
+                }
+            }
+            p[repindex]=stream[i];
+            pagefaultcnt++;
+ 
+           
+        }
+        //else
+          //  printf("No page fault!");
+     }
+     printf("lru ");
+     pageFaultCnt();
 }
 void lfu()
 {
      interface();
+     initialize();
 }
 
 void sc()
 {
      interface();
+     initialize();
 
 }
 
 void esc()
 {
      interface();
+     initialize();
 }
 
 int main()
 {
-   
-    int ch;
+    char buffer[10];
+    int select[3];
+    int cnt=0;
+    
     while(1){
-        printf("Page Replacement ¾Ë°í¸®Áò ½Ã¹Ä·¹ÀÌÅÍ¸¦ ¼±ÅÃÇÏ½Ã¿À (ÃÖ´ë3°³)\n");
+        printf("Page Replacement ì•Œê³ ë¦¬ì¦˜ ì‹œë®¬ë ˆì´í„°ë¥¼ ì„ íƒí•˜ì‹œì˜¤ (ìµœëŒ€3ê°œ)\n");
         printf("1.Optimal  2.FIFO  3.LIFO  4.LRU  5.LFU  6.SC  7.ESC 8.exit\n");
 
-        scanf("%d",&ch);
-        switch (ch)
+        scanf("%s",&buffer);
+        char *ptr = strtok(buffer," ");
+        
+        while (ptr !=NULL)
+        { 
+            
+            select[cnt++] = atoi(ptr);
+            ptr=strtok(NULL, "");
+        }
+        if (cnt > 3) {
+            printf("wrong\n");
+            continue;
+        }
+        for (int i = 0; i < cnt; i++)
         {
-        case 1 : 
-            optimal();
-            break;
-        case 2 :
-            fifo();
-            break;
-        case 3 :
-            lifo();
-            break;
+            printf("%d\n",cnt);
+            printf("%d\n",select[i]);
+        }
         
-        case 4 :
-            lru();
-            break;
-        
-        case 5 :
-            lfu();
-            break;
-        
-        case 6 :
-            sc();
-            break;
-        
-        case 7 :
-            esc();    
-            break;
+        for (int i = 0; i < cnt; i++) {
+            switch (select[i])
+            {
+            case 1 : 
+                optimal();
+                break;
+            case 2 :
+                fifo();
+                break;
+            case 3 :
+                lifo();
+                break;
+            
+            case 4 :
+                lru();
+                break;
+            
+            case 5 :
+                lfu();
+                break;
+            
+            case 6 :
+                sc();
+                break;
+            
+            case 7 :
+                esc();    
+                break;
 
-        case 8 :
-            return 0;
-            break;
-        
-        default:
-            printf("Àß¸øµÈ ÀÔ·ÂÀÔ´Ï´Ù.\n");
-            break;
+            case 8 :
+                return 0;
+                break;
+            
+            default:
+                printf("ì˜ëª»ëœ ì…ë ¥ì…ë‹ˆë‹¤.\n");
+                break;
+            }
         }
     }
 }
+
 
 
