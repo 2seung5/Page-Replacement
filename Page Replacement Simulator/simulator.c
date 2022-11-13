@@ -7,8 +7,10 @@ int fn;              //페이지 프레임 개수
 int stream[10];     //참조 페이지 스트링
 int hit;             //hit 변수 0 or 1
 int pagefaultcnt;    //페이지 폴트 카운터
-int p[100];
+int p[100];         //page 
 int i,j,k;
+
+
 
 
 void getData1()  // 프로그램 내부에서 입력 받는 방식
@@ -45,6 +47,17 @@ void initialize()          // 초기화 해주는 함수
     pagefaultcnt=0;
     for(int i=0; i<fn; i++)
         p[i]=9999;
+}
+
+int pageindex()
+{
+    for(i=0;i<fn-1;i++)
+    {
+        p[i] = 9999;
+        return 1;
+    }
+
+    return 0;
 }
 
 int isHit(int data)          //hit 확인하는 함수
@@ -153,6 +166,12 @@ void fifo()
      for(i=0; i<10; i++)
      {
         //printf("\nFor %d :",stream[i]);
+
+        if (pageindex())
+        {
+            /* code */
+        }
+        
  
         if(isHit(stream[i])==0)
         {
